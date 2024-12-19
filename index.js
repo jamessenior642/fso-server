@@ -53,6 +53,40 @@ app.delete('/api/notes/:id', (request, response) => {
     response.status(204).end()
 })
 
+const generateId = () => {
+    let id
+    do {
+        id = Math.floor(Math.random() * 1000000)
+    } while (persons.some((entry) => entry.id === id)) // Ensure it's unique
+    return id
+}
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+
+    if (!body.name || !body.number) {
+        return response.status(400).json({
+            error: 'name or number missing'
+        })
+    }
+
+    if (persons.some(person => person.name === body.name)) {
+        return response.status(400).json({
+            error: 'person already exists in phonebook'
+        })
+    }
+
+    const person = {
+        id: generateId,
+        name: body.name,
+        number: body.number
+    }
+
+    persons = persons.concat(person)
+    response.json(person)
+})
+
+
 
 const PORT = 3003
 
