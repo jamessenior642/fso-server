@@ -58,7 +58,7 @@ app.get('/api/persons/:id', (request, response) => {
     response.json(person)
 })
 
-app.delete('/api/notes/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response) => {
     const id = request.params.id
     persons = persons.filter(p => p.id !== id)
     response.status(204).end()
@@ -99,7 +99,7 @@ app.post('/api/persons', (request, response) => {
 
 
 
-const PORT = 3003
+const PORT = process.env.PORT || 3003
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
