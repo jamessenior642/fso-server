@@ -9,31 +9,31 @@ const url = process.env.MONGODB_URI
 console.log('connecting to', url)
 
 mongoose.connect(url)
-  .then(result => {
+  .then(() => {
     console.log('connected to MongoDB')
   })
   .catch(error => {
     console.log('error connecting to MongoDB:', error.message)
   })
 
-  const personSchema = new mongoose.Schema({
-    name: {
-      type: String,
-      minLength: 3,
-      required: true,
-    },
-    number: {
-      type: String,
-      required: true,
-      validate: {
-        validator: function (v) {
-          // Regex: 2-3 digits, a hyphen, and then 5+ digits
-          return /^\d{2,3}-\d{6,}$/.test(v);
-        },
-        message: (props) => `${props.value} is not a valid phone number! It must follow the format XX-XXXXX or XXX-XXXXX.`,
+const personSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    minLength: 3,
+    required: true,
+  },
+  number: {
+    type: String,
+    required: true,
+    validate: {
+      validator: function (v) {
+        // Regex: 2-3 digits, a hyphen, and then 5+ digits
+        return /^\d{2,3}-\d{6,}$/.test(v)
       },
+      message: (props) => `${props.value} is not a valid phone number! It must follow the format XX-XXXXX or XXX-XXXXX.`,
     },
-  });
+  },
+})
 
 personSchema.set('toJSON', {
   transform: (document, returnedObject) => {
